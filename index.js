@@ -1,20 +1,13 @@
 const { readFile } = require("node:fs/promises");
 const { createServer } = require("node:http");
 
-const hostname = "127.0.0.1";
-const port = 3000;
-
-const server = createServer((req, res) => {
+createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   const fileName = getFileNameByUrl(req.url);
   getFilePromise(fileName).then((html) => res.end(html));
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+}).listen(3000);
 
 function getFileNameByUrl(url) {
   switch (url) {
