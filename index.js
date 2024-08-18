@@ -9,7 +9,7 @@ const server = createServer((req, res) => {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
 
   const fileName = getFileNameByUrl(req.url);
-  getHtmlPromise(fileName).then((html) => res.end(html));
+  getFilePromise(fileName).then((html) => res.end(html));
 });
 
 server.listen(port, hostname, () => {
@@ -33,6 +33,6 @@ function getFileNameByUrl(url) {
   }
 }
 
-async function getHtmlPromise(fileName) {
+async function getFilePromise(fileName) {
   return await readFile(fileName, "utf8");
 }
