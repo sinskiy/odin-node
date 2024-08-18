@@ -1,31 +1,13 @@
-const { readFile } = require("node:fs/promises");
-const { createServer } = require("node:http");
+const express = require("express");
 
-createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
+const app = express();
 
-  const fileName = getFileNameByUrl(req.url);
-  getFilePromise(fileName).then((html) => res.end(html));
-}).listen(3000);
+app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
+app.get("/about", (req, res) => res.sendFile(__dirname + "/about.html"));
+app.get("/contact-me", (req, res) =>
+  res.sendFile(__dirname + "/contact-me.html")
+);
+app.get("*", (req, res) => res.status(404).sendFile(__dirname + "/404.html"));
 
-function getFileNameByUrl(url) {
-  switch (url) {
-    case "/": {
-      return "index.html";
-    }
-    case "/about": {
-      return "about.html";
-    }
-    case "/contact-me": {
-      return "contact-me.html";
-    }
-    default: {
-      return "404.html";
-    }
-  }
-}
-
-async function getFilePromise(fileName) {
-  return await readFile(fileName, "utf8");
-}
+const PORT = 3000;
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));
